@@ -1,0 +1,12 @@
+import lxml.etree as etree
+
+tree = etree.parse("1.xml")
+root = tree.getroot()
+text = tree.xpath("//page")
+for a in text:
+    page = a.attrib['url']
+    s = a.xpath(".//text/text()")
+    count = 0
+    for st in s:
+        count = count + 1
+    print(page, ': ', count)

@@ -1,0 +1,37 @@
+import requests
+import lxml.etree as etree
+
+url1 = 'http://www.shkola.ua/'
+root = etree.Element("root")
+count = 1
+
+doc = etree.SubElement(root, "data")
+tree = etree.HTML(requests.get(url1).text)
+url = tree.xpath('/html/body//a//@href')
+
+for a in url:
+    if count <= 20:
+        tree = etree.HTML(requests.get('http://www.shkola.ua' + a).text)
+        print('http://www.shkola.ua' + a)
+        img = tree.xpath('/html/body//img/@src')
+        text1 = tree.xpath('/html/body//h3')
+        text2 = tree.xpath('/html/body//h2//text()')
+        text3 = tree.xpath('/html/body//h1//text()')
+        text4 = tree.xpath('/html/body//p//text()')
+        url_el = etree.SubElement(doc,"page", url = 'http://www.shkola.ua' + a)
+        for i in img:
+            etree.SubElement(url_el, "photo").text = i
+        for i in text1:
+            etree.SubElement(url_el, "text").text = i.text
+        for i in text2:
+            etree.SubElement(url_el, "text").text = i
+        for i in text3:
+            etree.SubElement(url_el, "text").text = i
+        for i in text4:
+            etree.SubElement(url_el, "text").text = i
+    count = count + 1
+
+tree = etree.tostring(root, pretty_print = True, encoding = 'utf-8', xml_declaration = True)
+f = open("1.xml","w")
+f.write(tree.decode("utf-8"))
+f.close()
