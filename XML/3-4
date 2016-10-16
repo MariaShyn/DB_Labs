@@ -2,25 +2,25 @@ import lxml.etree as etree
 import requests
 
 
-# url = "http://tennismag.com.ua/"
-# root = etree.Element("root")
-#
-# tree = etree.HTML(requests.get(url).text)
-# doc = etree.SubElement(root, "data")
-# price = tree.xpath("/html/body//td/span[@class='productPrice'][normalize-space()]/text()[1]")
-# image = tree.xpath('/html/body//td/a/img/@src')
-# name = tree.xpath('/html/body//td/a/@title')
-#
-# for i in range(20):
-#     node = etree.SubElement(doc, 'product', id = str(i+1))
-#     etree.SubElement(node, 'name').text = name[i].strip()
-#     etree.SubElement(node, 'price').text = price[i].strip()
-#     etree.SubElement(node, 'image').text = image[i].strip()
-#
-# tree = etree.tostring(root, pretty_print = True, encoding = 'utf-8', xml_declaration = True)
-# f = open("3.xml","w")
-# f.write(tree.decode("utf-8"))
-# f.close()
+url = "http://tennismag.com.ua/"
+root = etree.Element("root")
+
+tree = etree.HTML(requests.get(url).text)
+doc = etree.SubElement(root, "data")
+price = tree.xpath("/html/body//td/span[@class='productPrice'][normalize-space()]/text()[1]")
+image = tree.xpath('/html/body//td/a/img/@src')
+name = tree.xpath('/html/body//td/a/@title')
+
+for i in range(20):
+    node = etree.SubElement(doc, 'product', id = str(i+1))
+    etree.SubElement(node, 'name').text = name[i].strip()
+    etree.SubElement(node, 'price').text = price[i].strip()
+    etree.SubElement(node, 'image').text = image[i].strip()
+
+tree = etree.tostring(root, pretty_print = True, encoding = 'utf-8', xml_declaration = True)
+f = open("3.xml","w")
+f.write(tree.decode("utf-8"))
+f.close()
 
 
 dom = etree.parse('3.xml')
