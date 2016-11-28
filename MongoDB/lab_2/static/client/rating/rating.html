@@ -1,0 +1,42 @@
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3 text-center">
+        <h3>Map/Reduce</h3>
+       `<table class="table table-striped">
+		    <tr>
+                <th>Place</th>
+				<th>Name</th>
+                <th>Student amount</th>
+            </tr>
+			<tr ng-repeat = "school in schools | orderBy:'-studentAmount'">
+                <td>
+                    {{$index+1}}
+                </td>
+				<td>
+					{{school.name}}
+				</td>
+                <td>
+                    {{school.studentAmount}}
+                </td>
+			</tr>
+        </table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3 text-center">
+        <h3>Students from exams</h3>
+       `<table class="table table-striped">
+		    <tr>
+				<th>Name</th>
+                <th>Amount</th>
+            </tr>
+			<tr ng-repeat = "student in ::students">
+                <td>
+					{{student._id}}
+                </td>
+				<td>
+                    {{student.amount}}
+				</td>
+			</tr>
+        </table>
+	</div>
+</div>

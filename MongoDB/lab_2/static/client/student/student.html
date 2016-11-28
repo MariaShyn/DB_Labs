@@ -1,0 +1,87 @@
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+		<h3>Sort by Name and Sex</h3>
+		<table class="table table-striped">
+			<tr>
+				<th>
+					Name
+				</th>
+				<th>
+					Sex
+				</th>
+				<th>
+					Date of birth
+				</th>
+                <th>
+					Date of start
+				</th>
+				<th>
+					City
+				</th>
+			</tr>
+			<tr ng-repeat = "student in students">
+				<td>
+					{{student.name}}
+				</td>
+				<td>
+					{{student.sex}}
+				</td>
+				<td>
+					{{student.dateofbirth}}
+				</td>
+                <td>
+					{{student.dateofstart}}
+				</td>
+                <td>
+					{{student.city}}
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+		<h3>Students by cities(Group)</h3>
+		<table class="table table-striped">
+			<tr>
+				<th>
+					City
+				</th>
+				<th>
+					Students
+				</th>
+			</tr>
+			<tr ng-repeat = "city in cities">
+				<td>
+					{{city._id}}
+				</td>
+				<td>
+					{{city.students}}
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<!--div class = "row">
+	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+		<h3>Search by name</h3>
+		<input type="text" class="form-control" placeholder="Search...." ng-model="searchInput"/>
+		<button type="submit" class="btn btn-success" style="float:right;" ng-click = "searchPerson()">search</button>
+	</div>
+	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3"><br><br>
+		<table class="table table-striped">
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+			</tr>
+			<tr ng-repeat = "person in people">
+				<td>
+					{{person.id}}
+				</td>
+				<td>
+					{{person.name}}
+				</td>
+			</tr>
+		</table>
+	</div>
+</div-->

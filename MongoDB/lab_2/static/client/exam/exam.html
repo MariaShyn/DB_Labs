@@ -1,0 +1,196 @@
+<div class="row">
+	<div ng-init="detail.toggle = false; showFilter=false" class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+		<table class="table table-striped">
+			<tr>
+				<th>Date</th>
+				<th>Type of category</th>
+                <th>Driving school</th>
+                <th>Person</th>
+				<th>Passed</th>
+				<th>Remove</th>
+				<th>Edit</th>
+			</tr>
+			<tr ng-repeat = "exam in exams">
+				<td>
+					{{exam.date | date : 'MM/dd/yyyy'}}
+				</td>
+				<td>
+					{{exam.category.name}}
+				</td>
+                <td>
+					{{exam.school.name}}
+				</td>
+                <td>
+					{{exam.person.name}}
+				</td>
+				<td>
+					{{exam.passed}}
+				</td>
+				<td>
+					<button class = "btn btn-danger" ng-click = "removeExam(exam.date, exam.person.name, $index)">remove</button>
+				</td>
+				<td>
+					<button class="btn btn-warning" ng-click="detail.toggle = true;startEditing(exam, $index)"> edit</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+	<button class="btn btn-success" ng-click="showFilter = true;">Show filter</button>
+</div>
+<div class="row">
+	<div ng-show="showFilter" class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+		<h3>Passed exams (Filter)</h3>
+		<table class="table table-striped">
+			<tr>
+				<th>Date</th>
+				<th>Type of category</th>
+                <th>Driving school</th>
+                <th>Person</th>
+				<th>Passed</th>
+			</tr>
+			<tr ng-repeat = "exam in getList()">
+				<td>
+					{{exam.date | date : 'MM/dd/yyyy'}}
+				</td>
+				<td>
+					{{exam.category.name}}
+				</td>
+                <td>
+					{{exam.school.name}}
+				</td>
+                <td>
+					{{exam.person.name}}
+				</td>
+				<td>
+					{{exam.passed}}
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div ng-show="detail.toggle" class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+	<h3>Edit exam</h3>
+	<div>
+		<form class="form-horizontal" ng-submit = "updateExam($index)">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">ID</label>
+				<div class="col-sm-6">
+					<input class="form-control" ng-disabled="true" ng-model="editedElem.id"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="examEditDate" class="col-sm-2 control-label">Date</label>
+				<div class="col-sm-10">
+					<input type="date" name = "date" class="form-control" id="examEditDate" placeholder="Date" ng-model="editedElem.date">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="examEditTypeOfCategoryId" class="col-sm-2 control-label">TOC</label>
+				<div class="col-sm-10">
+					<select name="type_of_category"
+							class="col-sm-10 form-control"
+							ng-options="category.name for category in categories track by category.name"
+							id="examEditTypeOfCategoryId"
+							ng-model="editedElem.category">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="personEditId" class="col-sm-2 control-label">Person</label>
+				<div class="col-sm-10">
+					<select name="person"
+							class="form-control"
+							id="personEditId"
+							ng-options="person.name for person in people track by person.name"
+							ng-model="editedElem.person">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="editDrivingSchoolId" class="col-sm-2 control-label">Driving school</label>
+				<div class="col-sm-10">
+					<select name="driving_school"
+							class="form-control"
+							ng-options="drivingSchool.name for drivingSchool in drivingSchools track by drivingSchool.name"
+							id="editDrivingSchoolId"
+							ng-model="editedElem.school">
+					</select>
+				</div>	
+			</div>
+			<div class="form-group">
+				<label for="editPassed" class="col-sm-2 control-label">Passed: </label>
+				<div class="col-sm-10">
+					<select name="passed"
+							class="form-control"
+							id="editPassed"
+							ng-model="editedElem.passed"
+							ng-options="passedOption for passedOption in passedOptions track by passedOption">
+					</select>
+				</div>	
+			</div>
+			<div class="form-group row" >
+				<div class="col-sm-12">
+					<input type="submit" class="btn btn-success" style="float:right;" value = "edit">
+					<button ng-click="detail.toggle = false" class="btn btn-warning" style="float:right;margin-right : 5px;">close</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<div>
+	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+		<h3>Add a new exam</h3>
+		<div>
+			<form class="form-horizontal" ng-submit = "addNewExam()">
+				<div class="form-group">
+					<label for="examDate" class="col-sm-2 control-label">Date</label>
+					<div class="col-sm-10">
+			  			<input type="date" class="form-control" id="examDate" placeholder="Date" ng-model="newExam.date">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="examTypeOfCategoryId" class="col-sm-2 control-label">TOC</label>
+					<div class="col-sm-10"> 
+						<select name="repeatSelect" class="form-control" id="examTypeOfCategoryId" ng-model="newExam.category">
+					  		<option ng-repeat="category in categories" value="{{category}}">{{category.name}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="personId" class="col-sm-2 control-label">Person</label>
+					<div class="col-sm-10"> 
+						<select class="form-control" id="personId" ng-model="newExam.person">
+						  <option ng-repeat="person in people" value="{{person}}">{{person.name}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="drivingSchoolId" class="col-sm-2 control-label">Driving school</label>
+					<div class="col-sm-10">
+						<select class="form-control" id="drivingSchoolId" ng-model="newExam.school">
+						  <option ng-repeat="drivingSchool in drivingSchools" value="{{drivingSchool}}">{{drivingSchool.name}}</option>
+						</select>
+					</div>	
+				</div>
+				<div class="form-group">
+					<label for="passed" class="col-sm-2 control-label"> Passed: </label>
+					<div class="col-sm-10">
+						<select class="form-control" id="passed" ng-model="newExam.passed">
+						  <option value="true">true</option>
+						  <option value="false">false</option>
+						</select>
+					</div>	
+				</div>
+				<div class="form-group">
+					<div class="col-sm-12">
+			  			<input type="submit" class="btn btn-success" style="float:right;" value = "add">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+	</div>
+
