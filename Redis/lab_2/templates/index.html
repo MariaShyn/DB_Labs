@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app="db_lab_2">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css"><title>DB_LAB_3</title>
+  </head>
+  <body ng-cloak>
+    <nav class="navbar navbar-default navbar-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" ui-sref="main">BD_LAB</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a ui-sref="school">School</a></li>
+        </ul>
+        <ul class="nav navbar-nav">
+            <li><a ui-sref="category">Category</a></li>
+        </ul>
+        <ul class="nav navbar-nav">
+            <li><a ui-sref="student">Student</a></li>
+        </ul>
+        <ul class="nav navbar-nav">
+            <li><a ui-sref="exam">Recent Exams</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container-fluid">
+        <ui-view></ui-view>
+    </div>
+
+  </body>
+    <!-- VENDOR -->
+        <script src="static/bower_components/angular/angular.min.js"></script>
+        <script src="static/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+        <script src="static/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+        <script src="static/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- APP -->
+        <script src="static/app.js"></script>
+        <script src="static/client/school/school.controller.js"></script>
+        <script src="static/client/category/category.controller.js"></script>
+        <script src="static/client/student/student.controller.js"></script>
+        <script src="static/client/exam/exam.controller.js"></script>
+</html>

@@ -1,0 +1,39 @@
+<!--div class="row">
+	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+		<h4>Пошук за переліченням</h4>
+		<form class="form-horizontal" ng-submit = "getCategories()">
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Category</label>
+				<div class="col-sm-6">
+					<span ng-repeat = "category in savedCategories">
+						<input type="checkbox" ng-click="toggleCheckbox(category)"/>
+						<span>{{category.name}}</span>
+						<br>
+					</span>
+				</div>
+			</div>
+			<div class="form-group" >
+				<div class="col-sm-12">
+					<input type="submit" class="btn btn-success" style="float:right;" value = "search">
+				</div>
+			</div>
+		</form>
+	</div>
+</div-->
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+		<table class="table table-striped">
+			<tr>
+				<th>
+					Name
+				</th>
+			</tr>
+			<tr ng-repeat = "category in categories">
+				<td>
+					{{category.name}}
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+

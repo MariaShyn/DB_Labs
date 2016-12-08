@@ -1,0 +1,66 @@
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+		<h3>Choose a driving school</h3>
+		<div class="col-sm-10">
+			<select name="driving_school"
+					class="form-control"
+					ng-options="drivingSchool.name for drivingSchool in drivingSchools track by drivingSchool.name"
+					id="editDrivingSchoolId"
+					ng-change="update(chosenSchool.name)"
+					ng-model="chosenSchool">
+			</select>
+		</div>
+	</div>
+	<div ng-show="searchStarted" class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+		<h4>{{searchType}}</h4>
+		<h4>Time: {{searchTime}} s</h4>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
+		<h3>{{exams.length}} remain</h3><hr>
+		<table class="table table-striped">
+			<tr>
+				<th>№</th>
+				<th>Date</th>
+				<th>Type</th>
+                <th>School</th>
+                <th>Person</th>
+				<th>Passed</th>
+				<th>Remove</th>
+			</tr>
+			<tr ng-repeat = "exam in filteredExams">
+				<td>
+					{{$index+1}}
+				</td>
+				<td>
+					{{exam.date | date : 'MM/dd/yyyy'}}
+				</td>
+				<td>
+					{{exam.category.name}}
+				</td>
+                <td>
+					{{exam.school.name}}
+				</td>
+                <td>
+					{{exam.person.name}}
+				</td>
+				<td>
+					{{exam.passed}}
+				</td>
+				<td>
+					<button class = "btn btn-danger" ng-click = "removeExam(exam._id, $index)">remove</button>
+				</td>
+			</tr>
+		</table>
+		<uib-pagination
+				ng-model="currentPage"
+				total-items="exams.length"
+				items-per-page="numPerPage"
+				max-size="maxSize"
+				class="pagination-sm"
+				boundary-links="true">
+		</uib-pagination>
+	</div>
+</div>
+
