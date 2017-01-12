@@ -26,7 +26,6 @@ urlpatterns = [
     url(r'^api/school', views.school, name='school'),
     url(r'^api/db', views.fill_database, name='db'),
     url(r'^api/student', views.student, name='student'),
-    url(r'^api/search', views.search, name='student'),
     url(r'^api/rating', views.rating, name='rating'),
     url(r'^api/exam', views.exam, name='exam'),
     url(r'^api/category', views.category, name='category'),

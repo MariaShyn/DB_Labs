@@ -32,7 +32,7 @@
                     var begin = (($scope.currentPage - 1) * $scope.numPerPage),
                     end = begin + $scope.numPerPage;
                     $scope.filteredExams = $scope.exams.slice(begin, end);
-                };
+                }
 
 
                 function getExams() {

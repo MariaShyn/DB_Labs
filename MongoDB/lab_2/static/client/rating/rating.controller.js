@@ -16,8 +16,7 @@
                     $http.get('/api/rating')
                         .success(function(data){
                             $scope.schools = data.schools;
-                            $scope.students = data.students;
-                            console.log($scope.students)
+                            $scope.categories = data.categories;
                         })
                         .error(function(err){
                             alert(err);

@@ -6,6 +6,7 @@ from django.http import JsonResponse
 
 import json
 import redis
+import time
 import ast
 import random
 import pickle
@@ -116,7 +117,7 @@ def fill_database(request):
     people_count = fill_people()
     school_count = fill_school()
     categories_count = fill_categ()
-    for i in range(0, 100000):
+    for i in range(0, 50000):
         rand_person = random.randint(0, people_count-1)
         rand_school = random.randint(0, school_count-1)
         rand_category = random.randint(0, categories_count-1)
@@ -208,8 +209,8 @@ def school( request ):
 def search( request ):
     if request.method == 'GET':
         all_exams = []
-        cash = True
         search_name = request.GET.__getitem__('name')
+        start_time = time.time()
         if (r.exists(search_name)):
             cash = True
             all_exams = pickle.loads(r.get(search_name))
@@ -220,6 +221,8 @@ def search( request ):
                 query["school.name"] = search_name
                 all_exams = list(exams.find(query))
             r.set(search_name, pickle.dumps(all_exams))
+        time_res = time.time() - start_time
+        print(time_res)
         return JsonResponse({"exams": dumps(all_exams), "cash": cash}, safe=False)
     return HttpResponse("unknown command")
 

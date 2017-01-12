@@ -1,27 +1,51 @@
 <div class="row">
 	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3 text-center">
         <h3>Map/Reduce</h3>
+        <p>Amount of passed for each school</p>
        `<table class="table table-striped">
 		    <tr>
                 <th>Place</th>
 				<th>Name</th>
                 <th>Student amount</th>
             </tr>
-			<tr ng-repeat = "school in schools | orderBy:'-studentAmount'">
+			<tr ng-repeat = "school in schools | orderBy:'-value'">
                 <td>
                     {{$index+1}}
                 </td>
 				<td>
-					{{school.name}}
+					{{school._id}}
 				</td>
                 <td>
-                    {{school.studentAmount}}
+                    {{school.value}}
                 </td>
 			</tr>
         </table>
 	</div>
 </div>
 <div class="row">
+	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3 text-center">
+        <p>Amount of students for each category</p>
+       `<table class="table table-striped">
+		    <tr>
+                <th>Place</th>
+				<th>Name</th>
+                <th>Student amount</th>
+            </tr>
+			<tr ng-repeat = "category in categories | orderBy:'-value'">
+                <td>
+                    {{$index+1}}
+                </td>
+				<td>
+					{{category._id}}
+				</td>
+                <td>
+                    {{category.value}}
+                </td>
+			</tr>
+        </table>
+	</div>
+</div>
+<!--div class="row">
 	<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3 text-center">
         <h3>Students from exams</h3>
        `<table class="table table-striped">

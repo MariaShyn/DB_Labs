@@ -3,7 +3,9 @@ from django.http import HttpResponse
 from django.template import Template, RequestContext
 from django.shortcuts import render
 from django.http import JsonResponse
+from bson.code import Code
 import json
+import random
 import os
 import datetime
 from bson.objectid import ObjectId
@@ -11,7 +13,7 @@ from pymongo import MongoClient
 
 client = MongoClient('localhost', 27017)
 
-db = client.driving_school_graduation
+db = client.driving_school_graduation_lab2
 schools = db.schools
 exams = db.exams
 people = db.people
@@ -60,6 +62,7 @@ def fill_people():
     }]
     for student in all_students:
         people.insert_one(student)
+    return len(all_students)
 
 
 def fill_school():
@@ -76,6 +79,7 @@ def fill_school():
     }]
     for school in all_schools:
         schools.insert_one(school)
+    return len(all_schools)
 
 
 def fill_categ():
@@ -95,12 +99,33 @@ def fill_categ():
     }]
     for categ in all_categories:
         categories.insert_one(categ)
+    return len(all_categories)
 
 
 def fill_database(request):
-    fill_people()
-    fill_school()
-    fill_categ()
+    pass_options = ['true', 'false']
+    people_count = fill_people()
+    school_count = fill_school()
+    categories_count = fill_categ()
+    for i in range(0, 100):
+        rand_person = random.randint(0, people_count - 1)
+        rand_school = random.randint(0, school_count - 1)
+        rand_category = random.randint(0, categories_count - 1)
+        rand_passed = random.randint(0, 1)
+        one_person = people.find().skip(rand_person).next()
+        one_school = schools.find().skip(rand_school).next()
+        one_category = categories.find().skip(rand_category).next()
+        one_person['_id'] = str(one_person['_id'])
+        one_category['_id'] = str(one_category['_id'])
+        one_school['_id'] = str(one_school['_id'])
+        exam = {
+            'date': datetime.datetime.utcnow(),
+            'category': one_category,
+            'person': one_person,
+            'school': one_school,
+            'passed': pass_options[rand_passed]
+        }
+        exams.insert_one(exam)
     return JsonResponse("success", safe=False)
 
 
@@ -191,21 +216,6 @@ def student(request):
     return HttpResponse("unknown command")
 
 
-def search(request):
-    """qw = request.GET.__getitem__('name')
-    if qw:
-        sw = ("SELECT id, name FROM person WHERE MATCH (name) AGAINST ('\"" + qw + "\"' IN BOOLEAN MODE)")
-        db.query(sw)
-        r = db.use_result()
-        line1 = r.fetch_row()
-        results = []
-        while line1:
-            results.append({"id": line1[0][0], "name": line1[0][1]})
-            line1 = r.fetch_row()
-    return JsonResponse(results, safe=False)
-"""
-
-
 def exam( request ):
     if request.method == 'GET':
         all_exams = get_exam()
@@ -245,52 +255,42 @@ def exam( request ):
     return HttpResponse("unknown command")
 
 
-def iter_group(queue):
-    buf = []
-    prev_key = None
-
-    for val in queue:
-        cur_key, cur_val = val
-        # print cur_key, cur_val
-        if cur_key == prev_key or prev_key is None:
-            buf.append(cur_val)
-        else:
-            yield prev_key, buf
-            buf = []
-            buf.append(cur_val)
-        prev_key = cur_key
-
-    if buf:
-        yield cur_key, buf
-
-
-class MapReduce:
-    def __init__(self):
-        self.queue = []
-
-    def send(self, a, b):
-        self.queue.append((a, b))
-
-    def count(self):
-        return len(self.queue)
-
-    def __iter__(self):
-        return iter_group(sorted(self.queue))
-
-
 def rating(request):
+    map1 = Code("function () {"
+                "    emit(this.category.name, 1);"
+                "}")
+    reduce1 = Code("function (key, values) {"
+                    "var total = 0;"
+                    "for (var i = 0; i < values.length; i++) {"
+                    "    total += values[i];"
+                    "  }"
+                    "  return total;"
+                    "}")
+    result1 = exams.map_reduce(map1, reduce1, "myresults1")
+
+    map2 = Code("function () {"
+                "   if(this.passed) {"
+                "       emit(this.school.name, 1);"
+                "   }"
+                "}")
+    reduce2 = Code("function (key, values) {"
+                   "var total = 0;"
+                   "for (var i = 0; i < values.length; i++) {"
+                   "    total += values[i];"
+                   "  }"
+                   "  return total;"
+                   "}")
+    result2 = exams.map_reduce(map2, reduce2, "myresults2")
     if request.method == 'GET':
-        schools = []
-        x = MapReduce()
-        for item in get_exam():
-            x.send(item['school']['name'], 1)
-        for word, ones in x:
-            schools.append({"name": word, "studentAmount": sum(ones)})
-        students = list(exams.aggregate([
-            {'$unwind':'$person'},
-            { '$group': {'_id': '$person.name', 'amount': {'$sum': 1}}}
-        ]))
-        return JsonResponse({'schools': schools, 'students': students}, safe=False)
+        all_categories = []
+        all_schools = []
+        for doc in result1.find():
+            all_categories.append(doc)
+        for doc in result2.find():
+            all_schools.append(doc)
+        print(all_schools)
+        print(all_categories)
+        return JsonResponse({'schools': all_schools, 'categories': all_categories}, safe=False)
     return HttpResponse("unknown command")
 
 

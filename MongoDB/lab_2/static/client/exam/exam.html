@@ -2,6 +2,7 @@
 	<div ng-init="detail.toggle = false; showFilter=false" class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
 		<table class="table table-striped">
 			<tr>
+				<th>№</th>
 				<th>Date</th>
 				<th>Type of category</th>
                 <th>Driving school</th>
@@ -11,6 +12,9 @@
 				<th>Edit</th>
 			</tr>
 			<tr ng-repeat = "exam in exams">
+				<td>
+					{{$index+1}}
+				</td>
 				<td>
 					{{exam.date | date : 'MM/dd/yyyy'}}
 				</td>
@@ -31,40 +35,6 @@
 				</td>
 				<td>
 					<button class="btn btn-warning" ng-click="detail.toggle = true;startEditing(exam, $index)"> edit</button>
-				</td>
-			</tr>
-		</table>
-	</div>
-</div>
-<div class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
-	<button class="btn btn-success" ng-click="showFilter = true;">Show filter</button>
-</div>
-<div class="row">
-	<div ng-show="showFilter" class="col-md-6 col-md-offset-3 col-xs-6 col-xs-offset-3 col-lg-6 col-lg-offset-3">
-		<h3>Passed exams (Filter)</h3>
-		<table class="table table-striped">
-			<tr>
-				<th>Date</th>
-				<th>Type of category</th>
-                <th>Driving school</th>
-                <th>Person</th>
-				<th>Passed</th>
-			</tr>
-			<tr ng-repeat = "exam in getList()">
-				<td>
-					{{exam.date | date : 'MM/dd/yyyy'}}
-				</td>
-				<td>
-					{{exam.category.name}}
-				</td>
-                <td>
-					{{exam.school.name}}
-				</td>
-                <td>
-					{{exam.person.name}}
-				</td>
-				<td>
-					{{exam.passed}}
 				</td>
 			</tr>
 		</table>
